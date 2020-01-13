@@ -1,0 +1,89 @@
+---
+title: "Practice"
+author: "Stacy"
+date: "1/13/2020"
+output:
+  html_document: default
+  word_document: default
+editor_options: 
+  chunk_output_type: console
+---
+.
+```{r}
+library(tidyverse)
+mobile<-read_csv("https://raw.githubusercontent.com/vmandela99/Class-assignment-12th-july-2019/master/mobilemoney_data.csv")
+```
+
+## report on summary
+
+skimr::skim(mobile)
+
+The data has 28 columns and 2509 rows. There exists 23 character column frequency and 5 numeric column type frequency. There are no group variables.There are three districts in total. There are 7 types of accounts, 2 gender types and urban types
+
+
+#how many account types are there
+```{r}
+mobile %>% count(account_type, sort = T)
+
+```
+The highest number of people have mobile number tranfer with 825 people having it.The least number of people have online bank account:12. The number of people with VSLA Account is 669.The number of people with a Bank Account are 323.131 people have no account type. MFI account has 82 people
+
+
+#which districts have many people
+```{r}
+mobile%>%count(district, sort=TRUE)
+
+```
+The district with the most number of accounts is District_C with 856 accounts whereas the district with the least number of accounts is District_A with 815 accounts. District_B has 838 accounts
+
+
+#what percentage of people from district A have Sacco accounts (from the  entire data)
+```{r}
+mobile%>% count(district, account_type) %>% mutate(percent=n/sum(n)*100)
+
+```
+In the entire data 5.9% of the people are from district A and have a Saccp account
+
+
+#what percentage of people from district A have Sacco accounts (filtering from district A)
+```{r}
+mobile%>% filter(district == "District_A") %>%count(district, account_type) %>% mutate(percent=n/sum(n)*100)
+
+```
+18.92 of the people from district A have a Sacco account
+
+#how many grades completed are there
+```{r}
+mobile%>%count(highest_grade_completed, sort=T)
+
+```
+Primary 6 has the highest number of grades completed of 671. other has the lowest number of grades completed of 12.
+
+#what is the largest weight in the survey
+
+```{r}
+max(mobile$weight)
+```
+The largest weight is 4812.165
+
+#what percentage of people in the university have mobile money accounts
+```{r}
+mobile%>%filter(highest_grade_completed == "university")%>% count(account_type)%>%mutate(percent=n/sum(n)*100)
+
+
+```
+32.4% of the university students have a mobile account.
+
+#how many account types are there
+##graph
+```{r}
+mobile %>% count(account_type) %>% ggplot(aes(x=account_type,y=n)) + geom_col()
+
+```
+The mobile money has the tallest bar whereas the online bank  bar is the shortest 
+#which districts have many people
+```{r}
+mobile%>%count(district)%>%ggplot (aes(x=district, y=n))+ geom_col()
+
+```
+The three bars are of equal length
